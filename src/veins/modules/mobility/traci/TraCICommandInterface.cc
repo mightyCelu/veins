@@ -944,9 +944,7 @@ void TraCICommandInterface::Vehicle::setParameter(const std::string& parameter, 
 void TraCICommandInterface::Vehicle::setParameter(const std::string& parameter, const std::string& value)
 {
     static int32_t nParameters = 2;
-    std::stringstream par;
-    par << "carFollowModel." << parameter;
-    TraCIBuffer buf = traci->connection.query(CMD_SET_VEHICLE_VARIABLE, TraCIBuffer() << static_cast<uint8_t>(VAR_PARAMETER) << nodeId << static_cast<uint8_t>(TYPE_COMPOUND) << nParameters << static_cast<uint8_t>(TYPE_STRING) << par.str() << static_cast<uint8_t>(TYPE_STRING) << value);
+    TraCIBuffer buf = traci->connection.query(CMD_SET_VEHICLE_VARIABLE, TraCIBuffer() << static_cast<uint8_t>(VAR_PARAMETER) << nodeId << static_cast<uint8_t>(TYPE_COMPOUND) << nParameters << static_cast<uint8_t>(TYPE_STRING) << parameter << static_cast<uint8_t>(TYPE_STRING) << value);
     ASSERT(buf.eof());
 }
 
@@ -967,9 +965,7 @@ void TraCICommandInterface::Vehicle::getParameter(const std::string& parameter, 
 
 void TraCICommandInterface::Vehicle::getParameter(const std::string& parameter, std::string& value)
 {
-    std::stringstream par;
-    par << "carFollowModel." << parameter;
-    TraCIBuffer response = traci->connection.query(CMD_GET_VEHICLE_VARIABLE, TraCIBuffer() << static_cast<uint8_t>(VAR_PARAMETER) << nodeId << static_cast<uint8_t>(TYPE_STRING) << par.str());
+    TraCIBuffer response = traci->connection.query(CMD_GET_VEHICLE_VARIABLE, TraCIBuffer() << static_cast<uint8_t>(VAR_PARAMETER) << nodeId << static_cast<uint8_t>(TYPE_STRING) << parameter);
     uint8_t cmdLength;
     response >> cmdLength;
     uint8_t responseId;
