@@ -551,7 +551,9 @@ void Mac1609_4::handleBroadcast(Mac80211Pkt* macPkt, DeciderResult80211* res)
 {
     statsReceivedBroadcasts++;
     unique_ptr<BaseFrame1609_4> wsm(check_and_cast<BaseFrame1609_4*>(macPkt->decapsulate()));
-    wsm->setControlInfo(new PhyToMacControlInfo(res));
+    auto ctrlInfo = new PhyToMacControlInfo(res);
+    ctrlInfo->setSourceAddress(macPkt->getSrcAddr());
+    wsm->setControlInfo(ctrlInfo);
     sendUp(wsm.release());
 }
 
@@ -575,7 +577,9 @@ void Mac1609_4::handleLowerMsg(cMessage* msg)
         }
         else {
             unique_ptr<BaseFrame1609_4> wsm(check_and_cast<BaseFrame1609_4*>(macPkt->decapsulate()));
-            wsm->setControlInfo(new PhyToMacControlInfo(res));
+            auto ctrlInfo = new PhyToMacControlInfo(res);
+            ctrlInfo->setSourceAddress(macPkt->getSrcAddr());
+            wsm->setControlInfo(ctrlInfo);
             handleUnicast(macPkt->getSrcAddr(), std::move(wsm));
         }
     }
