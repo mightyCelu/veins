@@ -110,6 +110,15 @@ public:
         return myMacAddr;
     }
 
+    /**
+     * @brief Sets the MAC address of this MAC module.
+     */
+    void setMACAddress(const LAddress::L2Type& mac)
+    {
+        ASSERT(mac != LAddress::L2NULL());
+        myMacAddr = mac;
+    }
+
 protected:
     /**
      * @brief Registers this bridge's NIC with INET's InterfaceTable.
