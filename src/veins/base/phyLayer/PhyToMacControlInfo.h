@@ -27,6 +27,7 @@
 #include "veins/veins.h"
 
 #include "veins/base/phyLayer/Decider.h"
+#include "veins/base/utils/SimpleAddress.h"
 
 namespace veins {
 
@@ -42,6 +43,9 @@ class VEINS_API PhyToMacControlInfo : public cObject {
 protected:
     /** The result of the decider evaluation.*/
     DeciderResult* result;
+
+    /** @deprecated The sender MAC address. */
+    VEINS_DEPRECATED LAddress::L2Type sourceAddress;
 
 public:
     /**
@@ -68,6 +72,24 @@ public:
     DeciderResult* getDeciderResult() const
     {
         return result;
+    }
+
+    /**
+     * @brief Returns address of the packet's sender.
+     * @deprecated Will be removed in favor of using MacToNetwControlInfo for received packets on the Mac in future releases.
+     */
+    VEINS_DEPRECATED void setSourceAddress(LAddress::L2Type sourceAddress)
+    {
+        this->sourceAddress = sourceAddress;
+    }
+
+    /**
+     * @brief Returns address of the packet's sender.
+     * @deprecated Will be removed in favor of using MacToNetwControlInfo for received packets on the Mac in future releases.
+     */
+    VEINS_DEPRECATED LAddress::L2Type getSourceAddress() const
+    {
+        return sourceAddress;
     }
 
     /**
