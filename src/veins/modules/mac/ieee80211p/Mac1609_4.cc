@@ -26,6 +26,7 @@
 
 #include "veins/modules/phy/DeciderResult80211.h"
 #include "veins/base/phyLayer/PhyToMacControlInfo.h"
+#include "veins/base/utils/MacToNetwControlInfo.h"
 #include "veins/modules/messages/PhyControlMessage_m.h"
 #include "veins/modules/messages/AckTimeOutMessage_m.h"
 
@@ -551,7 +552,7 @@ void Mac1609_4::handleBroadcast(Mac80211Pkt* macPkt, DeciderResult80211* res)
 {
     statsReceivedBroadcasts++;
     unique_ptr<BaseFrame1609_4> wsm(check_and_cast<BaseFrame1609_4*>(macPkt->decapsulate()));
-    wsm->setControlInfo(new PhyToMacControlInfo(res));
+    wsm->setControlInfo(new MacToNetwControlInfo(macPkt->getSrcAddr(), -1, res->getSnr()));
     sendUp(wsm.release());
 }
 
@@ -575,7 +576,7 @@ void Mac1609_4::handleLowerMsg(cMessage* msg)
         }
         else {
             unique_ptr<BaseFrame1609_4> wsm(check_and_cast<BaseFrame1609_4*>(macPkt->decapsulate()));
-            wsm->setControlInfo(new PhyToMacControlInfo(res));
+            wsm->setControlInfo(new MacToNetwControlInfo(macPkt->getSrcAddr(), -1, res->getSnr()));
             handleUnicast(macPkt->getSrcAddr(), std::move(wsm));
         }
     }
